@@ -1,11 +1,11 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
+
 public class MovementHero : MonoBehaviour
 {
-    //private const string _movement = "Horizontal";
-    //private const string _jamp = "Jamp";
-    //private const string _animationMovement = "Speed";
-    //private const string _animationJamp = "Jamp";
+    private const string AnimationMovement = "Speed";
+    private const string AnimationJamp = "Jamp";
 
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpPower;
@@ -27,10 +27,10 @@ public class MovementHero : MonoBehaviour
         Vector2 targetVelocity = new Vector2(_horizontalMove * _speed, _rigidbody.velocity.y);
         _rigidbody.velocity = targetVelocity;
 
-        if (Input.GetButton("Jamp") && _isGroundet)
+        if (Input.GetButton("Jump") && _isGroundet)
         {
             _rigidbody.AddForce(transform.up * _jumpPower);
-
+            _rigidbody.velocity = new Vector2(0, 0);
         }
     }
 
@@ -40,15 +40,15 @@ public class MovementHero : MonoBehaviour
 
         _horizontalMove = Input.GetAxisRaw("Horizontal");
 
-        _animator.SetFloat("Speed", Mathf.Abs(_horizontalMove));
+        _animator.SetFloat(AnimationMovement, Mathf.Abs(_horizontalMove));
 
         if (_isGroundet == false)
         {
-            _animator.SetBool("Jamp", true);
+            _animator.SetBool(AnimationJamp, true);
         }
         else
         {
-            _animator.SetBool("Jamp", false);
+            _animator.SetBool(AnimationJamp, false);
         }
 
         if (_horizontalMove > 0)
