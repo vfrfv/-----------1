@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
 
     private Transform[] _points;
     private int _currentPoint;
+    private float _turn = 180f;
 
     private void Start()
     {
@@ -21,9 +22,7 @@ public class EnemyMovement : MonoBehaviour
     }
 
     private void Update()
-    {
-        float turn = 180f;
-
+    {      
         Transform target = _points[_currentPoint];
 
         transform.position = Vector3.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
@@ -32,7 +31,7 @@ public class EnemyMovement : MonoBehaviour
 
         if(direction.x > 0)
         {
-            transform.rotation = Quaternion.Euler(0, turn, 0);
+            transform.rotation = Quaternion.Euler(0, _turn, 0);
         }
         else
         {

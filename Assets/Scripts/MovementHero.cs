@@ -5,7 +5,9 @@ using UnityEngine;
 public class MovementHero : MonoBehaviour
 {
     private const string AnimationMovement = "Speed";
-    private const string AnimationJamp = "Jamp";
+    private const string AnimationJamp = "Jump";
+    private const string MovementByClicking = "Horizontal";
+    private const string ClickJump = "Jump";
 
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpPower;
@@ -14,6 +16,7 @@ public class MovementHero : MonoBehaviour
     private float _horizontalMove = 0f;
     private bool _isGroundet = false;
     private Rigidbody2D _rigidbody;
+    private float _turn = 180f;
 
     private void Awake()
     {
@@ -27,7 +30,7 @@ public class MovementHero : MonoBehaviour
         Vector2 targetVelocity = new Vector2(_horizontalMove * _speed, _rigidbody.velocity.y);
         _rigidbody.velocity = targetVelocity;
 
-        if (Input.GetButton("Jump") && _isGroundet)
+        if (Input.GetButton(ClickJump) && _isGroundet)
         {
             _rigidbody.AddForce(transform.up * _jumpPower);
             _rigidbody.velocity = new Vector2(0, 0);
@@ -36,9 +39,7 @@ public class MovementHero : MonoBehaviour
 
     private void Update()
     {
-        float turn = 180f;
-
-        _horizontalMove = Input.GetAxisRaw("Horizontal");
+        _horizontalMove = Input.GetAxisRaw(MovementByClicking);
 
         _animator.SetFloat(AnimationMovement, Mathf.Abs(_horizontalMove));
 
@@ -53,7 +54,7 @@ public class MovementHero : MonoBehaviour
 
         if (_horizontalMove > 0)
         {
-            transform.rotation = Quaternion.Euler(0, turn, 0);
+            transform.rotation = Quaternion.Euler(0, _turn, 0);
         }
         else if (_horizontalMove < 0)
         {
