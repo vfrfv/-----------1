@@ -295,6 +295,9 @@ MonoBehaviour:
   _speed: 6
   _jumpPower: 900
   _animator: {fileID: 869359373}
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &196930267
 MonoBehaviour:
   m_ObjectHideFlags: 0

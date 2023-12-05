@@ -12,6 +12,7 @@ public class MovementHero : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpPower;
     [SerializeField] private Animator _animator;
+    [SerializeField] private LayerMask _layerMask;
 
     private float _horizontalMove = 0f;
     private bool _isGroundet = false;
@@ -66,7 +67,7 @@ public class MovementHero : MonoBehaviour
     {
         float radius = 0.3f;
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius, LayerMask.GetMask("Ground"));
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius, _layerMask);
 
         _isGroundet = colliders.Length > 0;
     }
