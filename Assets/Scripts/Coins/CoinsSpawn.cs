@@ -6,6 +6,7 @@ public class CoinsSpawn : MonoBehaviour
     [SerializeField] Coin _prefabCoin;
     [SerializeField] Transform _spawnPoints;
 
+    private Coroutine _coroutine;
     private Coin _coin;
 
     public void Start()
@@ -17,7 +18,12 @@ public class CoinsSpawn : MonoBehaviour
 
     private void OnColected()
     {
-        StartCoroutine(Eneibl());
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
+
+        _coroutine = StartCoroutine(Eneibl());
     }
 
     private IEnumerator Eneibl()
