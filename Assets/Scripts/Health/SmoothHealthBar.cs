@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Slider))] 
 public class SmoothHealthBar : MonoBehaviour
 {
     [SerializeField] private GameObject _helthSourse;

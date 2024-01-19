@@ -88,7 +88,7 @@ public class Hero : MonoBehaviour , IHelth
             Die();
     }
 
-    public void Die()
+    private void Die()
     {
         Destroy(gameObject);
     }

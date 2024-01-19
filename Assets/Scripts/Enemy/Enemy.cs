@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour, IHelth
             Die();
     }
 
-    public void Die()
+    private void Die()
     {
         Destroy(gameObject);
     }
