@@ -1,11 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IHelth
 {
-    private int _health = 6;
+    public event Action<float> Changed;
     private int _damage = 1;
+
+    public int Health { get; private set; } = 6;
+
+    private void Start()
+    {
+        Changed?.Invoke(Health);
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -17,9 +23,10 @@ public class Enemy : MonoBehaviour
 
     public void ApplyDamage(int damage)
     {
-        _health -= damage;
+        Health -= damage;
+        Changed?.Invoke(Health);
 
-        if (_health <= 0)
+        if (Health <= 0)
             Die();
     }
 

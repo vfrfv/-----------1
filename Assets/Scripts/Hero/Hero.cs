@@ -1,16 +1,19 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Hero : MonoBehaviour
+public class Hero : MonoBehaviour , IHelth
 {
-    private int _health = 4;
+    public event Action<float> Changed;
+
     private int _damage = 1;
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody;
     private MovementHero _movementHero;
     private RaisePharmacy _raisePharmacy;
-    //private Pharmacy _pharmacy;  
+
+    public int Health { get; private set; } = 4;
 
     private void Awake()
     {
@@ -18,7 +21,11 @@ public class Hero : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
         _movementHero = GetComponent<MovementHero>();
         _raisePharmacy = GetComponent<RaisePharmacy>();
-        //_pharmacy = GetComponent<Pharmacy>();
+    }
+
+    private void Start()
+    {
+        Changed?.Invoke(Health);
     }
 
     private void OnEnable()
@@ -65,17 +72,19 @@ public class Hero : MonoBehaviour
     {
         int maximumNumberLives = 4;
 
-        if (_health < maximumNumberLives)
+        if (Health < maximumNumberLives)
         {
-            _health++;
+            Health++;
+            Changed?.Invoke(Health);
         }
     }
 
     public void ApplyDamage(int damage)
     {
-        _health -= damage;
+        Health -= damage;
+        Changed?.Invoke(Health);
 
-        if (_health <= 0)
+        if (Health <= 0)
             Die();
     }
 

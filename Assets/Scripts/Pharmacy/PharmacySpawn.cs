@@ -38,7 +38,7 @@ public class PharmacySpawn : MonoBehaviour
 
     private IEnumerator Eneibl()
     {
-        int appearanceTimer = 10;
+        int appearanceTimer = 2;
 
         yield return new WaitForSeconds(appearanceTimer);
 

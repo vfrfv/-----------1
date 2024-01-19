@@ -13,6 +13,7 @@ public class MovementHero : MonoBehaviour
     [SerializeField] private float _jumpPower;
     [SerializeField] private Animator _animator;
     [SerializeField] private LayerMask _layerMask;
+    [SerializeField] private Transform _playerModel;
 
     private float _horizontalMove = 0f;
     private bool _isGroundet = false;
@@ -55,11 +56,11 @@ public class MovementHero : MonoBehaviour
 
         if (_horizontalMove > 0)
         {
-            transform.rotation = Quaternion.Euler(0, _turn, 0);
+           _playerModel.rotation = Quaternion.Euler(0, _turn, 0);
         }
         else if (_horizontalMove < 0)
         {
-            transform.rotation = Quaternion.Euler(Vector3.zero);
+           _playerModel.rotation = Quaternion.Euler(Vector3.zero);
         }
     }
 
