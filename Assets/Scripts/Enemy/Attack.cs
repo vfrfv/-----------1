@@ -1,31 +1,30 @@
-using System.Collections;
 using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
     [SerializeField] private float _rayLength;
     [SerializeField] private LayerMask _layerMask;
+    [SerializeField] private EnemyMovement _enemyMovement;
+    [SerializeField] private Transform _transform;
+    [SerializeField] private Enemy _enemy;
 
     private int _turn = 180;
     private int _speed = 4;
-    private EnemyMovement _enemyMovement;
-    private Coroutine _coroutine;
+    private Transform _playerPosition;
 
-    private void Awake()
+    private void Update()
     {
-        _enemyMovement = GetComponent<EnemyMovement>();
+        if (_playerPosition != null)
+        {
+            Run(_playerPosition);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent(out Hero hero))
         {
-            if (_coroutine != null)
-            {
-                StopCoroutine(_coroutine);
-            }
-
-            _coroutine = StartCoroutine(Run(hero.transform));
+            _playerPosition = hero.transform;
 
             _enemyMovement.enabled = false;
         }
@@ -35,50 +34,30 @@ public class Attack : MonoBehaviour
     {
         if (collision.TryGetComponent(out Hero hero))
         {
-            if (_coroutine != null)
-            {
-                StopCoroutine(_coroutine);
-            }
+            _playerPosition = null;
 
             _enemyMovement.enabled = true;
         }
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawRay(transform.position, Vector2.down * _rayLength);
-    //}
-
-    private IEnumerator Run(Transform purpose)
+    private void Run(Transform purpose)
     {
-        bool isRun = true;
+        RaycastHit2D hit = Physics2D.Raycast(_transform.position, Vector2.down, _rayLength, _layerMask);
 
-        while (isRun)
+        if (hit.collider != null && _enemy.IsFrozen == false)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, _rayLength, _layerMask);
+            var direction = purpose.position - _transform.position;
 
-            if (hit.collider != null)
+            if (direction.x > 0)
             {
-                var direction = purpose.position - transform.position;
-
-                if (direction.x > 0)
-                {
-                    transform.rotation = Quaternion.Euler(0, _turn, 0);
-                }
-                else
-                {
-                    transform.rotation = Quaternion.Euler(Vector3.zero);
-                }
-
-                transform.position = Vector3.MoveTowards(transform.position, new Vector2(purpose.position.x, transform.position.y), _speed * Time.deltaTime);
-
-                yield return null;
+                _transform.rotation = Quaternion.Euler(0, _turn, 0);
             }
             else
             {
-                isRun = false;
+                _transform.rotation = Quaternion.Euler(Vector3.zero);
             }
+
+            _transform.position = Vector3.MoveTowards(_transform.position, new Vector2(purpose.position.x, _transform.position.y), _speed * Time.deltaTime);
         }
     }
 }

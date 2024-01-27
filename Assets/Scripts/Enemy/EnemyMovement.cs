@@ -7,9 +7,15 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private Transform _directionPoint;
 
+    private Enemy _enemy;
     private Transform[] _points;
     private int _currentPoint;
     private float _turn = 180f;
+
+    private void Awake()
+    {
+        _enemy = GetComponent<Enemy>();
+    }
 
     private void Start()
     {
@@ -23,29 +29,31 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {      
-        Transform target = _points[_currentPoint];
-
-        transform.position = Vector3.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
-
-        var direction = target.position - transform.position;
-
-        if(direction.x > 0)
+        if(_enemy.IsFrozen == false)
         {
-            transform.rotation = Quaternion.Euler(0, _turn, 0);
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(Vector3.zero);
-        }
+            Transform target = _points[_currentPoint];
+            transform.position = Vector3.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
 
-        if (transform.position == target.position) 
-        {
-            _currentPoint++;
+            var direction = target.position - transform.position;
 
-            if (_currentPoint == _points.Length)
+            if (direction.x > 0)
             {
-                _currentPoint = 0;
+                transform.rotation = Quaternion.Euler(0, _turn, 0);
             }
-        }
+            else
+            {
+                transform.rotation = Quaternion.Euler(Vector3.zero);
+            }
+
+            if (transform.position == target.position)
+            {
+                _currentPoint++;
+
+                if (_currentPoint == _points.Length)
+                {
+                    _currentPoint = 0;
+                }
+            }
+        }     
     }
 }

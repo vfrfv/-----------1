@@ -13,9 +13,4 @@ public class Pharmacy : MonoBehaviour
 
         Colected?.Invoke();
     }
-
-    //public void Addlife(int life)
-    //{
-    //    life++;
-    //}
 }

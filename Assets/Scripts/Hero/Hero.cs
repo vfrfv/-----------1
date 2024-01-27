@@ -3,17 +3,19 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Hero : MonoBehaviour , IHelth
+[RequireComponent(typeof(Rigidbody2D))]
+public class Hero : MonoBehaviour, IHelth
 {
-    public event Action<float> Changed;
-
     private int _damage = 1;
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody;
     private MovementHero _movementHero;
     private RaisePharmacy _raisePharmacy;
 
-    public int Health { get; private set; } = 4;
+    public int CurrentNumberLives { get; private set; } = 6;
+    public int MaximumNumberLives { get; private set; } = 6;
+
+    public event Action<float> Changed;
 
     private void Awake()
     {
@@ -25,17 +27,35 @@ public class Hero : MonoBehaviour , IHelth
 
     private void Start()
     {
-        Changed?.Invoke(Health);
+        Changed?.Invoke(CurrentNumberLives);
     }
 
     private void OnEnable()
     {
-        _raisePharmacy.Colected += AddLives;
+        _raisePharmacy.Colected += Treated;
     }
 
     private void OnDisable()
     {
-        _raisePharmacy.Colected -= AddLives;
+        _raisePharmacy.Colected -= Treated;
+    }
+
+    public void AddLife(int life)
+    {
+        if (CurrentNumberLives < MaximumNumberLives)
+        {
+            CurrentNumberLives += life;
+            Changed?.Invoke(CurrentNumberLives);
+        }
+    }
+
+    public void ApplyDamage(int damage)
+    {
+        CurrentNumberLives -= damage;
+        Changed?.Invoke(CurrentNumberLives);
+
+        if (CurrentNumberLives <= 0)
+            Die();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -68,24 +88,13 @@ public class Hero : MonoBehaviour , IHelth
         _movementHero.enabled = true;
     }
 
-    private void AddLives()
+    private void Treated()
     {
-        int maximumNumberLives = 4;
-
-        if (Health < maximumNumberLives)
+        if (CurrentNumberLives < MaximumNumberLives)
         {
-            Health++;
-            Changed?.Invoke(Health);
+            CurrentNumberLives++;
+            Changed?.Invoke(CurrentNumberLives);
         }
-    }
-
-    public void ApplyDamage(int damage)
-    {
-        Health -= damage;
-        Changed?.Invoke(Health);
-
-        if (Health <= 0)
-            Die();
     }
 
     private void Die()

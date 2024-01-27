@@ -3,14 +3,19 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IHelth
 {
-    public event Action<float> Changed;
     private int _damage = 1;
+    private StateMashine _state;
 
-    public int Health { get; private set; } = 6;
+    public int CurrentNumberLives { get; private set; } = 15;
+    public bool IsFrozen { get; private set; } = false;
+
+    public event Action<float> Changed;
 
     private void Start()
     {
-        Changed?.Invoke(Health);
+        _state = new StateMashine();
+        _state.Initialize(new Walking());
+        Changed?.Invoke(CurrentNumberLives);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -21,13 +26,36 @@ public class Enemy : MonoBehaviour, IHelth
         }
     }
 
+    public void Freeze()
+    {
+        IsFrozen = true;
+    }
+
+    public void Unfreeze()
+    {
+        IsFrozen = false;
+    }
+
     public void ApplyDamage(int damage)
     {
-        Health -= damage;
-        Changed?.Invoke(Health);
+        CurrentNumberLives -= damage;
+        Changed?.Invoke(CurrentNumberLives);
 
-        if (Health <= 0)
+        if (CurrentNumberLives <= 0)
             Die();
+    }
+
+    public int GiveLife()
+    {
+        int lefe = 1;
+
+        if (CurrentNumberLives > 0)
+        {
+            CurrentNumberLives -= lefe;
+            Changed?.Invoke(CurrentNumberLives);
+        }
+
+        return lefe;
     }
 
     private void Die()
