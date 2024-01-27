@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Hero))]
 public class SuperAbility : MonoBehaviour
 {
     private const string AnimationSuperAbility = "SuperAbility";
@@ -24,7 +25,7 @@ public class SuperAbility : MonoBehaviour
             {
                 enemy.Freeze();
 
-                CheckAvailabilityCoriutine();
+                StopRunningCoriutine();
 
                 _coroutine = StartCoroutine(StartAbility());
                 _animator.SetTrigger(AnimationSuperAbility);
@@ -32,7 +33,7 @@ public class SuperAbility : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 enemy.Unfreeze();
-                CheckAvailabilityCoriutine();
+                StopRunningCoriutine();
             }
         }
     }
@@ -41,10 +42,10 @@ public class SuperAbility : MonoBehaviour
     {
         _enemy.Unfreeze();
 
-        CheckAvailabilityCoriutine();
+        StopRunningCoriutine();
     }
 
-    private void CheckAvailabilityCoriutine()
+    private void StopRunningCoriutine()
     {
         if (_coroutine != null)
         {
@@ -54,12 +55,15 @@ public class SuperAbility : MonoBehaviour
 
     private IEnumerator StartAbility()
     {
-        while (_seconds < _timeAbility && _hero.CurrentNumberLives < _hero.MaximumNumberLives)
+        int amountDelay = 1;
+        var delay = new WaitForSeconds(amountDelay);
+
+        while (_seconds < _timeAbility && _hero.Value < _hero.MaxValue)
         {
             _hero.AddLife(_enemy.GiveLife());
             _seconds++;
 
-            yield return new WaitForSeconds(1);
+            yield return delay;
         }
     }
 }

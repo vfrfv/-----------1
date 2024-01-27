@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(MovementHero))]
+[RequireComponent(typeof(RaisePharmacy))]
 public class Hero : MonoBehaviour, IHelth
 {
     private int _damage = 1;
@@ -12,8 +14,8 @@ public class Hero : MonoBehaviour, IHelth
     private MovementHero _movementHero;
     private RaisePharmacy _raisePharmacy;
 
-    public int CurrentNumberLives { get; private set; } = 6;
-    public int MaximumNumberLives { get; private set; } = 6;
+    public int Value { get; private set; } = 6;
+    public int MaxValue { get; private set; } = 6;
 
     public event Action<float> Changed;
 
@@ -27,7 +29,7 @@ public class Hero : MonoBehaviour, IHelth
 
     private void Start()
     {
-        Changed?.Invoke(CurrentNumberLives);
+        Changed?.Invoke(Value);
     }
 
     private void OnEnable()
@@ -42,19 +44,19 @@ public class Hero : MonoBehaviour, IHelth
 
     public void AddLife(int life)
     {
-        if (CurrentNumberLives < MaximumNumberLives)
+        if (Value < MaxValue)
         {
-            CurrentNumberLives += life;
-            Changed?.Invoke(CurrentNumberLives);
+            Value += life;
+            Changed?.Invoke(Value);
         }
     }
 
     public void ApplyDamage(int damage)
     {
-        CurrentNumberLives -= damage;
-        Changed?.Invoke(CurrentNumberLives);
+        Value -= damage;
+        Changed?.Invoke(Value);
 
-        if (CurrentNumberLives <= 0)
+        if (Value <= 0)
             Die();
     }
 
@@ -90,10 +92,10 @@ public class Hero : MonoBehaviour, IHelth
 
     private void Treated()
     {
-        if (CurrentNumberLives < MaximumNumberLives)
+        if (Value < MaxValue)
         {
-            CurrentNumberLives++;
-            Changed?.Invoke(CurrentNumberLives);
+            Value++;
+            Changed?.Invoke(Value);
         }
     }
 

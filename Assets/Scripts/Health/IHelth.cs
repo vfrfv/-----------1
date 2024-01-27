@@ -4,5 +4,5 @@ public interface IHelth
 {
     event Action<float> Changed;
 
-    int CurrentNumberLives { get; }
+    int Value { get; }
 }

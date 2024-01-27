@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent (typeof(Enemy))]
 public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private Transform _way;

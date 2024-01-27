@@ -4,18 +4,15 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IHelth
 {
     private int _damage = 1;
-    private StateMashine _state;
 
-    public int CurrentNumberLives { get; private set; } = 15;
+    public int Value { get; private set; } = 15;
     public bool IsFrozen { get; private set; } = false;
 
     public event Action<float> Changed;
 
     private void Start()
     {
-        _state = new StateMashine();
-        _state.Initialize(new Walking());
-        Changed?.Invoke(CurrentNumberLives);
+        Changed?.Invoke(Value);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -38,10 +35,10 @@ public class Enemy : MonoBehaviour, IHelth
 
     public void ApplyDamage(int damage)
     {
-        CurrentNumberLives -= damage;
-        Changed?.Invoke(CurrentNumberLives);
+        Value -= damage;
+        Changed?.Invoke(Value);
 
-        if (CurrentNumberLives <= 0)
+        if (Value <= 0)
             Die();
     }
 
@@ -49,10 +46,10 @@ public class Enemy : MonoBehaviour, IHelth
     {
         int lefe = 1;
 
-        if (CurrentNumberLives > 0)
+        if (Value > 0)
         {
-            CurrentNumberLives -= lefe;
-            Changed?.Invoke(CurrentNumberLives);
+            Value -= lefe;
+            Changed?.Invoke(Value);
         }
 
         return lefe;
