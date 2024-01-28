@@ -1,19 +1,27 @@
 using System.Collections;
 using UnityEngine;
 
-public class CoinsSpawn : MonoBehaviour
+public class CoinsSpawner : MonoBehaviour
 {
-    [SerializeField] Coin _prefabCoin;
-    [SerializeField] Transform _spawnPoints;
+    [SerializeField] private Coin _prefabCoin;
+    [SerializeField] private Transform _spawnPoints;
 
     private Coroutine _coroutine;
     private Coin _coin;
 
     public void Start()
     {
-        _coin = Instantiate(_prefabCoin, _spawnPoints.position, Quaternion.identity);
-
+        _coin = Instantiate(_prefabCoin, _spawnPoints.position, Quaternion.identity);      
         _coin.Colected += OnColected;
+    }
+
+    private void OnEnable()
+    {
+    }
+
+    private void OnDisable()
+    {
+        _coin.Colected -= OnColected;
     }
 
     private void OnColected()
@@ -23,10 +31,10 @@ public class CoinsSpawn : MonoBehaviour
             StopCoroutine(_coroutine);
         }
 
-        _coroutine = StartCoroutine(Eneibl());
+        _coroutine = StartCoroutine(Enaibl());
     }
 
-    private IEnumerator Eneibl()
+    private IEnumerator Enaibl()
     {
         float appearanceTimer = 3f;
 

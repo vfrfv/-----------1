@@ -8,8 +8,9 @@ using UnityEngine;
 [RequireComponent(typeof(RaisePharmacy))]
 public class Hero : MonoBehaviour, IHelth
 {
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+
     private int _damage = 1;
-    private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody;
     private MovementHero _movementHero;
     private RaisePharmacy _raisePharmacy;
@@ -21,7 +22,6 @@ public class Hero : MonoBehaviour, IHelth
 
     private void Awake()
     {
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _movementHero = GetComponent<MovementHero>();
         _raisePharmacy = GetComponent<RaisePharmacy>();

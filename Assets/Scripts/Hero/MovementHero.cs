@@ -59,12 +59,10 @@ public class MovementHero : MonoBehaviour
 
         if (_horizontalMove > 0)
         {
-            _playerModel.rotation = Quaternion.Euler(0, _turn, 0);
             _boxCollider.transform.rotation = Quaternion.Euler(0, _turn, 0);
         }
         else if (_horizontalMove < 0)
         {
-            _playerModel.rotation = Quaternion.Euler(Vector3.zero);
             _boxCollider.transform.rotation = Quaternion.Euler(Vector3.zero);
         }
     }
